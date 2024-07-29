@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
-import { IUser, UserModel } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../../config';
 import validator from 'validator';
+import { IUser, UserModel } from './auth.interface';
 
 const UserSchema = new Schema<IUser, UserModel>(
   {

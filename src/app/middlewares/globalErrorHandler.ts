@@ -13,7 +13,6 @@ import { handleZodError } from '../../errors/handleZodError';
 import { handleCastError } from '../../errors/handleCastError';
 import ApiError from '../../errors/ApiError';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 
 const globalErrorHandler: ErrorRequestHandler = (

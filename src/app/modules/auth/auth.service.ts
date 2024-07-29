@@ -5,16 +5,8 @@
 
 import bcrypt from 'bcrypt';
 import ApiError from '../../../errors/ApiError';
-import {
-  IActivationRequest,
-  IActivationToken,
-  IRegistration,
-  IReqUser,
-  IUser,
-} from './user.interface';
 import cron from 'node-cron';
-import User from './user.model';
-import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
+import { JwtPayload, Secret } from 'jsonwebtoken';
 import config from '../../../config';
 import { Request } from 'express';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
@@ -26,13 +18,21 @@ import sendEmail from '../../../utils/sendEmail';
 import { registrationSuccessEmailBody } from '../../../mails/user.register';
 import { ENUM_USER_ROLE } from '../../../enums/user';
 import { sendResetEmail } from '../auth/sendResetMails';
-import { userSearchableField } from './user.constants';
 import { logger } from '../../../shared/logger';
+import {
+  IActivationRequest,
+  IRegistration,
+  IReqUser,
+  IUser,
+} from './auth.interface';
+import User from './auth.model';
+import { userSearchableField } from './auth.constants';
 
 //!
 //!
 const registrationUser = async (payload: IRegistration) => {
-  const { name, email, password, phone_number, role } = payload;
+  const { name, email, password, phone_number, role, confirmPassword } =
+    payload;
   const user = {
     name,
     email,
@@ -41,7 +41,9 @@ const registrationUser = async (payload: IRegistration) => {
     role,
     expirationTime: Date.now() + 2 * 60 * 1000,
   } as unknown as IUser;
-
+  if (password !== confirmPassword) {
+    throw new ApiError(400, "Password and ConfirmPassword didn't match");
+  }
   const isEmailExist = await User.findOne({ email });
   if (isEmailExist) {
     throw new ApiError(400, 'Email already exist');
@@ -453,7 +455,7 @@ const blockUser = async (id: string): Promise<IUser | null> => {
   return result;
 };
 
-export const UserService = {
+export const AuthService = {
   createUser,
   getAllUsers,
   deleteUser,

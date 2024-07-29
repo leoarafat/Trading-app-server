@@ -6,8 +6,6 @@ import { NotFoundHandler } from './errors/NotFoundHandler';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
-// import './app/modules/subscriptions/subscription.cron';
-// import './app/modules/notifications/notification.cron';
 export const app: Application = express();
 
 app.use(
@@ -33,7 +31,7 @@ app.use(express.static('uploads'));
 app.use('/', routes);
 
 app.get('/', async (req: Request, res: Response) => {
-  res.json('Welcome to bdCalling');
+  res.json('Welcome to Trading App');
 });
 
 app.use(globalErrorHandler);

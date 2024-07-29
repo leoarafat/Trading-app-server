@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Request, RequestHandler, Response } from 'express';
-import { UserService } from './user.service';
 import sendResponse from '../../../shared/sendResponse';
-import { IUser } from './user.interface';
 import catchAsync from '../../../shared/catchasync';
 import config from '../../../config';
+import { IUser } from './auth.interface';
+import { AuthService } from './auth.service';
 
 const registrationUser: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
-    await UserService.registrationUser(req.body);
+    await AuthService.registrationUser(req.body);
 
     sendResponse(res, {
       statusCode: 200,
@@ -19,7 +19,7 @@ const registrationUser: RequestHandler = catchAsync(
 );
 const activateUser: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await UserService.activateUser(req.body);
+    const result = await AuthService.activateUser(req.body);
     const { refreshToken } = result;
     // set refresh token into cookie
     const cookieOptions = {
@@ -27,7 +27,7 @@ const activateUser: RequestHandler = catchAsync(
       httpOnly: true,
     };
     res.cookie('refreshToken', refreshToken, cookieOptions);
-    // await UserService.activateUser(req.body);
+    // await AuthService.activateUser(req.body);
 
     sendResponse(res, {
       statusCode: 201,
@@ -42,7 +42,7 @@ const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const { ...userData } = req.body;
 
-    const result = await UserService.createUser(userData);
+    const result = await AuthService.createUser(userData);
 
     sendResponse(res, {
       statusCode: 200,
@@ -53,7 +53,7 @@ const createUser: RequestHandler = catchAsync(
   },
 );
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.getAllUsers(req.query);
+  const result = await AuthService.getAllUsers(req.query);
   sendResponse<IUser[]>(res, {
     statusCode: 200,
     success: true,
@@ -65,7 +65,7 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const result = await UserService.deleteUser(id);
+  const result = await AuthService.deleteUser(id);
   sendResponse<IUser>(res, {
     statusCode: 200,
     success: true,
@@ -75,7 +75,7 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
 });
 const login = catchAsync(async (req: Request, res: Response) => {
   const { ...loginData } = req.body;
-  const result = await UserService.loginUser(loginData);
+  const result = await AuthService.loginUser(loginData);
   const { refreshToken } = result;
   // set refresh token into cookie
   const cookieOptions = {
@@ -95,7 +95,7 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   const { ...passwordData } = req.body;
   const user = req.user;
   // console.log(user, passwordData, 'user, passwordData');
-  await UserService.changePassword(user, passwordData);
+  await AuthService.changePassword(user, passwordData);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -103,7 +103,7 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const updateProfile = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.updateProfile(req);
+  const result = await AuthService.updateProfile(req);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -112,7 +112,7 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const forgotPass = catchAsync(async (req: Request, res: Response) => {
-  await UserService.forgotPass(req.body);
+  await AuthService.forgotPass(req.body);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -121,7 +121,7 @@ const forgotPass = catchAsync(async (req: Request, res: Response) => {
 });
 const checkIsValidForgetActivationCode = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await UserService.checkIsValidForgetActivationCode(req.body);
+    const result = await AuthService.checkIsValidForgetActivationCode(req.body);
     sendResponse(res, {
       statusCode: 200,
       success: true,
@@ -135,7 +135,7 @@ const resendActivationCode: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const data = req.body;
 
-    const result = await UserService.resendActivationCode(data);
+    const result = await AuthService.resendActivationCode(data);
 
     sendResponse(res, {
       statusCode: 200,
@@ -147,7 +147,7 @@ const resendActivationCode: RequestHandler = catchAsync(
 );
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
   // const token = req.headers.authorization || '';
-  await UserService.resetPassword(req.body);
+  await AuthService.resetPassword(req.body);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -155,7 +155,7 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const deleteMyAccount = catchAsync(async (req: Request, res: Response) => {
-  await UserService.deleteMyAccount(req.body);
+  await AuthService.deleteMyAccount(req.body);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -165,7 +165,7 @@ const deleteMyAccount = catchAsync(async (req: Request, res: Response) => {
 
 const blockUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const result = await UserService.blockUser(id);
+  const result = await AuthService.blockUser(id);
   sendResponse<IUser>(res, {
     statusCode: 200,
     success: true,
@@ -174,15 +174,13 @@ const blockUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const UserController = {
+export const AuthController = {
   createUser,
   getAllUsers,
-
   deleteUser,
   registrationUser,
   login,
   changePassword,
-
   updateProfile,
   forgotPass,
   resetPassword,

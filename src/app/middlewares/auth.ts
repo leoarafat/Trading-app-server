@@ -4,9 +4,7 @@ import config from '../../config';
 import ApiError from '../../errors/ApiError';
 import httpStatus from 'http-status';
 import { jwtHelpers } from '../../helpers/jwtHelpers';
-import User from '../modules/user/user.model';
-import Admin from '../modules/admin/admin.model';
-import { ENUM_USER_ROLE } from '../../enums/user';
+import User from '../modules/auth/auth.model';
 
 const auth =
   (...roles: string[]) =>
@@ -31,15 +29,8 @@ const auth =
 
         req.user = verifyUser;
         const isExist = await User.findById(verifyUser?.userId);
-        const checkAdmin = await Admin.findById(verifyUser?.userId);
-        if (verifyUser.role === ENUM_USER_ROLE.USER && !isExist) {
-          throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized');
-        }
 
-        if (
-          verifyUser.role === ENUM_USER_ROLE.ADMIN ||
-          (verifyUser.role === ENUM_USER_ROLE.SUPER_ADMIN && !checkAdmin)
-        ) {
+        if (!isExist) {
           throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized');
         }
 

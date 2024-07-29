@@ -1,20 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import config from '../../../config';
-import bcrypt from 'bcrypt';
-import jwt, { Secret } from 'jsonwebtoken';
+
 import ApiError from '../../../errors/ApiError';
-import { jwtHelpers } from '../../../helpers/jwtHelpers';
-import httpStatus from 'http-status';
-import QueryBuilder from '../../../builder/QueryBuilder';
-import { IGenericResponse } from '../../../interfaces/paginations';
-import { IAdmin } from './admin.interface';
-import { sendResetEmail } from '../auth/sendResetMails';
-import { ENUM_USER_ROLE } from '../../../enums/user';
-import { Request } from 'express';
-import { IRegistration, IReqUser, IUser } from '../auth/auth.interface';
+import { IRegistration } from '../auth/auth.interface';
 import User from '../auth/auth.model';
 
 //!
@@ -28,7 +16,9 @@ const registerAdmin = async (payload: IRegistration) => {
     throw new ApiError(400, 'Email already exist');
   }
   payload.role = 'ADMIN';
-  const newUser = await User.create(payload);
+
+  const newUser = await User.create({ ...payload, isActive: true });
+
   const { password: omit, ...userWithoutPassword } = newUser.toObject();
   return userWithoutPassword;
 };

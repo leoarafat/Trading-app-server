@@ -129,12 +129,7 @@ cron.schedule('* * * * *', async () => {
     logger.error('Error deleting expired users:', error);
   }
 });
-//!
-const createUser = async (userData: IUser): Promise<IUser | null> => {
-  const newUser = await User.create(userData);
 
-  return newUser;
-};
 //!
 const getAllUsers = async (
   query: Record<string, unknown>,
@@ -247,9 +242,9 @@ const loginUser = async (payload: any) => {
   );
 
   return {
-    id: checkUser?._id,
+    // id: checkUser?._id,
     conversationId: checkUser?.conversationId,
-    isPaid: checkUser?.isPaid,
+    // isPaid: checkUser?.isPaid,
     accessToken,
     refreshToken,
   };
@@ -456,7 +451,6 @@ const blockUser = async (id: string): Promise<IUser | null> => {
 };
 
 export const AuthService = {
-  createUser,
   getAllUsers,
   deleteUser,
   registrationUser,

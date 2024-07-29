@@ -38,20 +38,6 @@ const activateUser: RequestHandler = catchAsync(
   },
 );
 
-const createUser: RequestHandler = catchAsync(
-  async (req: Request, res: Response) => {
-    const { ...userData } = req.body;
-
-    const result = await AuthService.createUser(userData);
-
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: 'User created successfully',
-      data: result,
-    });
-  },
-);
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.getAllUsers(req.query);
   sendResponse<IUser[]>(res, {
@@ -86,7 +72,7 @@ const login = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'User loggedin successfully !',
+    message: 'Login Successful!',
     data: result,
   });
 });
@@ -175,7 +161,6 @@ const blockUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const AuthController = {
-  createUser,
   getAllUsers,
   deleteUser,
   registrationUser,

@@ -25,7 +25,7 @@ const updateSubscription = async (req: Request) => {
 
   const result = await Subscription.findOneAndUpdate(
     { _id: id },
-    { updatedData },
+    { ...updatedData },
     {
       new: true,
     },

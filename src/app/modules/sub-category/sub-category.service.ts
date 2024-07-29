@@ -43,7 +43,7 @@ const updateCategory = async (req: Request) => {
 
   const result = await SubCategory.findOneAndUpdate(
     { _id: id },
-    { updatedData },
+    { ...updatedData },
     {
       new: true,
     },

@@ -6,8 +6,8 @@ import { NotFoundHandler } from './errors/NotFoundHandler';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
-import './app/modules/subscriptions/subscription.cron';
-import './app/modules/notifications/notification.cron';
+// import './app/modules/subscriptions/subscription.cron';
+// import './app/modules/notifications/notification.cron';
 export const app: Application = express();
 
 app.use(

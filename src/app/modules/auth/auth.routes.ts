@@ -36,23 +36,8 @@ router.post('/reset-password', UserController.resetPassword);
 router.post('/resend', UserController.resendActivationCode);
 router.post('/verify-otp', UserController.checkIsValidForgetActivationCode);
 
-// router.get(
-//   '/admin/users',
-//   auth(ENUM_USER_ROLE.ADMIN),
-//   UserController.getAllUsers,
-// );
-
 //!IDS Work
-router.get(
-  '/profile',
-  auth(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  UserController.getSingleUser,
-);
-router.get(
-  '/others-profile/:id',
-  auth(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  UserController.getOthersProfile,
-);
+
 router.patch(
   '/edit-profile',
   auth(ENUM_USER_ROLE.USER),

@@ -18,12 +18,6 @@ import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import config from '../../../config';
 import { Request } from 'express';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
-import {
-  IChangePassword,
-  ILoginUser,
-  ILoginUserResponse,
-  IRefreshTokenResponse,
-} from '../auth/auth.interface';
 import { updateImageUrl } from '../../../utils/url-modifier';
 import QueryBuilder from '../../../builder/QueryBuilder';
 import { IGenericResponse } from '../../../interfaces/paginations';
@@ -34,11 +28,6 @@ import { ENUM_USER_ROLE } from '../../../enums/user';
 import { sendResetEmail } from '../auth/sendResetMails';
 import { userSearchableField } from './user.constants';
 import { logger } from '../../../shared/logger';
-import Post from '../posts/post.model';
-import { IPost } from '../posts/post.interface';
-import { Schedule } from '../schedule/schedule.model';
-import Admin from '../admin/admin.model';
-import Conversation from '../messages/conversation.model';
 
 //!
 //!
@@ -163,36 +152,7 @@ const getAllUsers = async (
     data: result,
   };
 };
-//!
-const getOthersProfile = async (id: string) => {
-  const result = await User.findById(id);
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  const posts = await Post.find({ user: id });
 
-  return {
-    posts,
-    userInfo: result,
-  };
-};
-//!
-const getSingleUser = async (user: IReqUser) => {
-  const result = await User.findById(user?.userId);
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  const posts = await Post.find({ user: user?.userId });
-  const schedule = await Schedule.find({
-    users: { $in: [user?.userId] },
-  });
-
-  return {
-    userInfo: result,
-    posts,
-    schedule,
-  };
-};
 //!
 const updateProfile = async (req: Request): Promise<IUser | null> => {
   //@ts-ignore
@@ -249,7 +209,7 @@ const deleteUser = async (id: string): Promise<IUser | null> => {
   return result;
 };
 //!
-const loginUser = async (payload: ILoginUser) => {
+const loginUser = async (payload: any) => {
   const { email, password } = payload;
 
   const isUserExist = (await User.isUserExist(email)) as IUser;
@@ -313,46 +273,11 @@ const deleteMyAccount = async (payload: {
   }
   return await User.findOneAndDelete({ email });
 };
-//!
-const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
-  //verify token
-  // invalid token - synchronous
-  let verifiedToken = null;
-  try {
-    verifiedToken = jwtHelpers.verifyToken(
-      token,
-      config.jwt.refresh_secret as Secret,
-    );
-  } catch (err) {
-    throw new ApiError(402, 'Invalid Refresh Token');
-  }
 
-  const { userId } = verifiedToken;
-
-  // checking deleted user's refresh token
-  const isUserExist = await User.findById(userId);
-  if (!isUserExist) {
-    throw new ApiError(403, 'User does not exist');
-  }
-  //generate new token
-
-  const newAccessToken = jwtHelpers.createToken(
-    {
-      id: isUserExist._id,
-      role: isUserExist.role,
-    },
-    config.jwt.secret as Secret,
-    config.jwt.expires_in as string,
-  );
-
-  return {
-    accessToken: newAccessToken,
-  };
-};
 //!
 const changePassword = async (
   user: JwtPayload | null,
-  payload: IChangePassword,
+  payload: any,
 ): Promise<void> => {
   const { userId } = user as any;
   //@ts-ignore
@@ -531,11 +456,9 @@ const blockUser = async (id: string): Promise<IUser | null> => {
 export const UserService = {
   createUser,
   getAllUsers,
-  getSingleUser,
   deleteUser,
   registrationUser,
   loginUser,
-  refreshToken,
   changePassword,
   updateProfile,
   forgotPass,
@@ -544,6 +467,5 @@ export const UserService = {
   deleteMyAccount,
   checkIsValidForgetActivationCode,
   resendActivationCode,
-  getOthersProfile,
   blockUser,
 };

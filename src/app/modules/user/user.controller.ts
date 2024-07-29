@@ -2,13 +2,9 @@
 import { Request, RequestHandler, Response } from 'express';
 import { UserService } from './user.service';
 import sendResponse from '../../../shared/sendResponse';
-import { IReqUser, IUser } from './user.interface';
+import { IUser } from './user.interface';
 import catchAsync from '../../../shared/catchasync';
 import config from '../../../config';
-import {
-  ILoginUserResponse,
-  IRefreshTokenResponse,
-} from '../auth/auth.interface';
 
 const registrationUser: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
@@ -66,26 +62,7 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     meta: result.meta,
   });
 });
-const getSingleUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.getSingleUser(req.user as IReqUser);
-  sendResponse<IUser>(res, {
-    statusCode: 200,
-    success: true,
-    message: 'User retrieved successfully',
-    //@ts-ignore
-    data: result,
-  });
-});
-const getOthersProfile = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.getOthersProfile(req.params.id);
-  sendResponse<IUser>(res, {
-    statusCode: 200,
-    success: true,
-    message: 'User retrieved successfully',
-    //@ts-ignore
-    data: result,
-  });
-});
+
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const result = await UserService.deleteUser(id);
@@ -106,37 +83,20 @@ const login = catchAsync(async (req: Request, res: Response) => {
     httpOnly: true,
   };
   res.cookie('refreshToken', refreshToken, cookieOptions);
-  sendResponse<ILoginUserResponse>(res, {
+  sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'User loggedin successfully !',
     data: result,
   });
 });
-const refreshToken = catchAsync(async (req: Request, res: Response) => {
-  const { refreshToken } = req.cookies;
-  const result = await UserService.refreshToken(refreshToken);
-  // set refresh token into cookie
-  const cookieOptions = {
-    secure: config.env === 'production',
-    httpOnly: true,
-  };
 
-  res.cookie('refreshToken', refreshToken, cookieOptions);
-
-  sendResponse<IRefreshTokenResponse>(res, {
-    statusCode: 200,
-    success: true,
-    message: 'User lohggedin successfully !',
-    data: result,
-  });
-});
 const changePassword = catchAsync(async (req: Request, res: Response) => {
   const { ...passwordData } = req.body;
   const user = req.user;
   // console.log(user, passwordData, 'user, passwordData');
   await UserService.changePassword(user, passwordData);
-  sendResponse<ILoginUserResponse>(res, {
+  sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'Password change successfully !',
@@ -217,12 +177,12 @@ const blockUser = catchAsync(async (req: Request, res: Response) => {
 export const UserController = {
   createUser,
   getAllUsers,
-  getSingleUser,
+
   deleteUser,
   registrationUser,
   login,
   changePassword,
-  refreshToken,
+
   updateProfile,
   forgotPass,
   resetPassword,
@@ -230,6 +190,6 @@ export const UserController = {
   deleteMyAccount,
   checkIsValidForgetActivationCode,
   resendActivationCode,
-  getOthersProfile,
+
   blockUser,
 };

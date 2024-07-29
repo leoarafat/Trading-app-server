@@ -3,30 +3,30 @@ import auth from '../../middlewares/auth';
 import { ENUM_USER_ROLE } from '../../../enums/user';
 
 import { uploadFile } from '../../middlewares/fileUploader';
-import { SubCategoryController } from './subscriptions.controller';
+import { SubscriptionController } from './subscriptions.controller';
+
 const router = Router();
 
 router.post(
   '/add',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  uploadFile(),
-  SubCategoryController.insertIntoDB,
+  SubscriptionController.insertIntoDB,
 );
 router.get(
   '/all',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.USER),
-  SubCategoryController.categories,
+  SubscriptionController.subscriptions,
 );
 router.patch(
   '/edit/:id',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   uploadFile(),
-  SubCategoryController.updateCategory,
+  SubscriptionController.updateSubscription,
 );
 router.delete(
   '/delete/:id',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  SubCategoryController.deleteCategory,
+  SubscriptionController.deleteSubscription,
 );
 
-export const SubCategoryRoutes = router;
+export const SubscriptionsRoutes = router;

@@ -1,37 +1,19 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Request } from 'express';
-import QueryBuilder from '../../../builder/QueryBuilder';
 import ApiError from '../../../errors/ApiError';
-import { ISubCategory } from './subscriptions.interface';
-import { SubCategory } from './subscriptions.model';
+import { ISubscriptions } from './subscriptions.interface';
+import { Subscription } from './subscriptions.model';
 
-const insertIntoDB = async (payload: ISubCategory) => {
-  return await SubCategory.create(payload);
+const insertIntoDB = async (payload: ISubscriptions) => {
+  return await Subscription.create(payload);
 };
 
-const categories = async (query: Record<string, unknown>) => {
-  const categoryQuery = new QueryBuilder(
-    SubCategory.find().populate('category'),
-    query,
-  )
-    .search([])
-    .filter()
-    .sort()
-    .paginate()
-    .fields();
-
-  const result = await categoryQuery.modelQuery;
-  const meta = await categoryQuery.countTotal();
-
-  return {
-    meta,
-    data: result,
-  };
+const subscriptions = async () => {
+  return await Subscription.find();
 };
-const updateCategory = async (req: Request) => {
+
+const updateSubscription = async (req: Request) => {
   const id = req.params.id;
-
-  const isExist = await SubCategory.findOne({ _id: id });
+  const isExist = await Subscription.findOne({ _id: id });
 
   if (!isExist) {
     throw new ApiError(404, 'Sub Category not found !');
@@ -39,9 +21,9 @@ const updateCategory = async (req: Request) => {
 
   const { ...categoryData } = req.body;
 
-  const updatedData: Partial<ISubCategory> = { ...categoryData };
+  const updatedData: Partial<ISubscriptions> = { ...categoryData };
 
-  const result = await SubCategory.findOneAndUpdate(
+  const result = await Subscription.findOneAndUpdate(
     { _id: id },
     { updatedData },
     {
@@ -50,17 +32,17 @@ const updateCategory = async (req: Request) => {
   );
   return result;
 };
-const deleteCategory = async (id: string) => {
-  const isExist = await SubCategory.findOne({ _id: id });
+const deleteSubscription = async (id: string) => {
+  const isExist = await Subscription.findOne({ _id: id });
 
   if (!isExist) {
-    throw new ApiError(404, 'SubCategory not found !');
+    throw new ApiError(404, 'Subscription not found !');
   }
-  return await SubCategory.findByIdAndDelete(id);
+  return await Subscription.findByIdAndDelete(id);
 };
-export const SubCategoryService = {
+export const SubscriptionService = {
   insertIntoDB,
-  categories,
-  updateCategory,
-  deleteCategory,
+  subscriptions,
+  updateSubscription,
+  deleteSubscription,
 };

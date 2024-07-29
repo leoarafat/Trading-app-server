@@ -9,7 +9,6 @@ const router = Router();
 router.post(
   '/add',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  uploadFile(),
   SubCategoryController.insertIntoDB,
 );
 router.get(

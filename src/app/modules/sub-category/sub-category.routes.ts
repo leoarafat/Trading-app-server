@@ -7,13 +7,13 @@ import { SubCategoryController } from './sub-category.controller';
 const router = Router();
 
 router.post(
-  '/add-category',
+  '/add',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   uploadFile(),
   SubCategoryController.insertIntoDB,
 );
 router.get(
-  '/categories',
+  '/all',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.USER),
   SubCategoryController.categories,
 );

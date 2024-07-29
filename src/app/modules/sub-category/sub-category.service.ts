@@ -10,7 +10,10 @@ const insertIntoDB = async (payload: ISubCategory) => {
 };
 
 const categories = async (query: Record<string, unknown>) => {
-  const categoryQuery = new QueryBuilder(SubCategory.find(), query)
+  const categoryQuery = new QueryBuilder(
+    SubCategory.find().populate('category'),
+    query,
+  )
     .search([])
     .filter()
     .sort()

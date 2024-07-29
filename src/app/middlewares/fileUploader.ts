@@ -16,10 +16,6 @@ export const uploadFile = () => {
         uploadPath = 'uploads/images/image';
       } else if (file.fieldname === 'video') {
         uploadPath = 'uploads/video';
-      } else if (file.fieldname === 'thumbnail') {
-        uploadPath = 'uploads/images/thumbnail';
-      } else if (file.fieldname === 'video_thumbnail') {
-        uploadPath = 'uploads/images/video_thumbnail';
       } else {
         uploadPath = 'uploads';
       }
@@ -28,6 +24,7 @@ export const uploadFile = () => {
         file.mimetype === 'image/jpeg' ||
         file.mimetype === 'image/png' ||
         file.mimetype === 'image/jpg' ||
+        file.mimetype === 'image/webp' ||
         file.mimetype === 'video/mp4'
       ) {
         cb(null, uploadPath);
@@ -59,6 +56,7 @@ export const uploadFile = () => {
         file.mimetype === 'image/jpeg' ||
         file.mimetype === 'image/png' ||
         file.mimetype === 'image/jpg' ||
+        file.mimetype === 'image/webp' ||
         file.mimetype === 'video/mp4'
       ) {
         cb(null, true);

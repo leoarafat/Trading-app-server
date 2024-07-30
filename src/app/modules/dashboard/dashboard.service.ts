@@ -1,6 +1,7 @@
 import { logger } from '../../../shared/logger';
 import User from '../auth/auth.model';
 import { Subscription } from '../subscriptions/subscriptions.model';
+import { Plan } from '../upgrade-plan/upgrade-plan.model';
 const getYearRange = (year: any) => {
   const startDate = new Date(`${year}-01-01`);
   const endDate = new Date(`${year}-12-31`);
@@ -8,14 +9,22 @@ const getYearRange = (year: any) => {
 };
 const totalCount = async () => {
   const totalUser = await User.countDocuments({ role: 'USER' });
-  const totalIncome = 1000;
+  const totalIncome = await Plan.aggregate([
+    {
+      $group: {
+        _id: null,
+        total: { $sum: '$amount' },
+      },
+    },
+  ]);
+
   const goldUsers = await User.countDocuments({ userType: 'Gold' });
   const platinumUsers = await User.countDocuments({ userType: 'Platinum' });
   const diamondUsers = await User.countDocuments({ userType: 'Diamond' });
 
   return {
     totalUser,
-    totalIncome,
+    totalIncome: totalIncome.length > 0 ? totalIncome[0].total : 0,
     goldUsers,
     platinumUsers,
     diamondUsers,
@@ -95,9 +104,10 @@ const getMonthlySubscriptionGrowth = async (year?: number) => {
   }
 };
 const latestPendingUsers = async () => {
-  const pendingUsers = await User.find({ isApproved: false })
-    .sort({ createdAt: -1 })
-    .limit(5);
+  const pendingUsers = await User.find({ isApproved: false }).sort({
+    createdAt: -1,
+  });
+
   return pendingUsers;
 };
 const getMonthlyUserGrowth = async (year?: number) => {

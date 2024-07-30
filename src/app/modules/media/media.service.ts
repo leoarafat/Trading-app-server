@@ -117,6 +117,14 @@ const deleteAdds = async (id: string) => {
   }
   return await Adds.findByIdAndDelete(id);
 };
+const deleteVideoAdds = async (id: string) => {
+  const isExist = await VideoAdds.findOne({ _id: id });
+
+  if (!isExist) {
+    throw new ApiError(404, 'VideoAdds not found !');
+  }
+  return await VideoAdds.findByIdAndDelete(id);
+};
 export const AddsService = {
   insertIntoDB,
   allAdds,
@@ -126,4 +134,5 @@ export const AddsService = {
   allVideoAdds,
   VideoAdds,
   updateVideoAdds,
+  deleteVideoAdds,
 };

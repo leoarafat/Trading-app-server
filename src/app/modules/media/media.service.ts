@@ -83,6 +83,32 @@ const updateAdds = async (req: Request) => {
   );
   return result;
 };
+const updateVideoAdds = async (req: Request) => {
+  const { files } = req as any;
+  const id = req.params.id;
+  const { ...AddsData } = req.body;
+
+  if (files && files.video) {
+    AddsData.video = `/video/${files.video[0].filename}`;
+  }
+
+  const isExist = await VideoAdds.findOne({ _id: id });
+
+  if (!isExist) {
+    throw new ApiError(404, 'VideoAdds not found !');
+  }
+
+  const updatedData: Partial<IAddsVideo> = { ...AddsData };
+
+  const result = await VideoAdds.findOneAndUpdate(
+    { _id: id },
+    { ...updatedData },
+    {
+      new: true,
+    },
+  );
+  return result;
+};
 const deleteAdds = async (id: string) => {
   const isExist = await Adds.findOne({ _id: id });
 
@@ -98,4 +124,6 @@ export const AddsService = {
   deleteAdds,
   addVideoAdds,
   allVideoAdds,
+  VideoAdds,
+  updateVideoAdds,
 };

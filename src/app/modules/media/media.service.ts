@@ -3,7 +3,7 @@ import { Request } from 'express';
 import QueryBuilder from '../../../builder/QueryBuilder';
 import ApiError from '../../../errors/ApiError';
 import { IAdds, IAddsVideo } from './media.interface';
-import { Adds } from './media.model';
+import { Adds, VideoAdds } from './media.model';
 
 const insertIntoDB = async (files: any, payload: IAdds) => {
   if (!files?.image) {
@@ -23,10 +23,26 @@ const addVideoAdds = async (files: any, payload: IAddsVideo) => {
   if (files?.video) {
     payload.video = `/video/${files.video[0].filename}`;
   }
-  return await Adds.create(payload);
+  return await VideoAdds.create(payload);
 };
 const allAdds = async (query: Record<string, unknown>) => {
   const addsQuery = new QueryBuilder(Adds.find(), query)
+    .search([])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await addsQuery.modelQuery;
+  const meta = await addsQuery.countTotal();
+
+  return {
+    meta,
+    data: result,
+  };
+};
+const allVideoAdds = async (query: Record<string, unknown>) => {
+  const addsQuery = new QueryBuilder(VideoAdds.find(), query)
     .search([])
     .filter()
     .sort()
@@ -81,4 +97,5 @@ export const AddsService = {
   updateAdds,
   deleteAdds,
   addVideoAdds,
+  allVideoAdds,
 };

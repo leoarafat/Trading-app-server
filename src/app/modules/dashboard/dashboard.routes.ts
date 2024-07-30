@@ -23,6 +23,11 @@ router.get(
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   DashboardController.getLatestPendingUsers,
 );
+router.get(
+  '/users-points',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  DashboardController.getUserTypePoints,
+);
 router.patch(
   '/approve/:id',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),

@@ -215,6 +215,40 @@ const rejectUser = async (userId: string) => {
     throw error;
   }
 };
+const getUserTypePoints = async () => {
+  try {
+    const goldUsers = await User.find({ userType: 'Gold' });
+    const platinumUsers = await User.find({ userType: 'Platinum' });
+    const diamondUsers = await User.find({ userType: 'Diamond' });
+
+    const goldPoints = goldUsers.reduce((acc, user) => acc + user.points, 0);
+    const platinumPoints = platinumUsers.reduce(
+      (acc, user) => acc + user.points,
+      0,
+    );
+    const diamondPoints = diamondUsers.reduce(
+      (acc, user) => acc + user.points,
+      0,
+    );
+    const totalIncome = await Plan.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$amount' },
+        },
+      },
+    ]);
+    return {
+      balance: totalIncome.length > 0 ? totalIncome[0].total : 0,
+      gold: goldPoints,
+      platinum: platinumPoints,
+      diamond: diamondPoints,
+    };
+  } catch (error) {
+    logger.error('Error in getUserTypePoints function: ', error);
+    throw error;
+  }
+};
 export const DashboardService = {
   totalCount,
   getMonthlySubscriptionGrowth,
@@ -222,4 +256,5 @@ export const DashboardService = {
   approveUser,
   rejectUser,
   latestPendingUsers,
+  getUserTypePoints,
 };

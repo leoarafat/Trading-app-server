@@ -70,6 +70,15 @@ const getLatestPendingUsers = catchAsync(
     });
   },
 );
+const getUserTypePoints = catchAsync(async (req: Request, res: Response) => {
+  const result = await DashboardService.getUserTypePoints();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Retrieved successfully',
+    data: result,
+  });
+});
 export const DashboardController = {
   totalCount,
   getMonthlySubscriptionGrowth,
@@ -77,4 +86,5 @@ export const DashboardController = {
   approveUser,
   rejectUser,
   getLatestPendingUsers,
+  getUserTypePoints,
 };

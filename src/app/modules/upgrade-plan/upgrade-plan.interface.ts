@@ -4,7 +4,7 @@ type SubscriptionStatus = 'paid' | 'unpaid' | 'trial';
 type SubscriptionPlan = 'Gold' | 'Platinum' | 'Diamond';
 type SubscriptionState = 'active' | 'inactive';
 
-export type ISubscription = {
+export type IUpgradePlan = {
   user_id: Schema.Types.ObjectId;
   plan_id: Schema.Types.ObjectId;
   startDate: Date;

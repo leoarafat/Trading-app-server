@@ -171,9 +171,39 @@ const getMonthlyUserGrowth = async (year?: number) => {
     throw error;
   }
 };
+const approveUser = async (userId: string) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error(`User not found with id ${userId}`);
+    }
+    user.isApproved = true;
+    await user.save();
+    return user;
+  } catch (error) {
+    logger.error('Error in approveUser function: ', error);
+    throw error;
+  }
+};
 
+const rejectUser = async (userId: string) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error(`User not found with id ${userId}`);
+    }
+    user.isApproved = false;
+    await user.save();
+    return user;
+  } catch (error) {
+    logger.error('Error in rejectUser function: ', error);
+    throw error;
+  }
+};
 export const DashboardService = {
   totalCount,
   getMonthlySubscriptionGrowth,
   getMonthlyUserGrowth,
+  approveUser,
+  rejectUser,
 };

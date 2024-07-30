@@ -38,8 +38,32 @@ const getMonthlyUserGrowth = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const approveUser = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.params.id;
+  const result = await DashboardService.approveUser(userId);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User approved successfully',
+    data: result,
+  });
+});
+
+const rejectUser = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.params.id;
+  const result = await DashboardService.rejectUser(userId);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User rejected successfully',
+    data: result,
+  });
+});
+
 export const DashboardController = {
   totalCount,
   getMonthlySubscriptionGrowth,
   getMonthlyUserGrowth,
+  approveUser,
+  rejectUser,
 };

@@ -18,4 +18,14 @@ router.get(
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   DashboardController.getMonthlyUserGrowth,
 );
+router.patch(
+  '/approve/:id',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  DashboardController.approveUser,
+);
+router.patch(
+  '/reject/:id',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  DashboardController.rejectUser,
+);
 export const DashboardRoutes = router;

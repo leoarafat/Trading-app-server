@@ -28,6 +28,10 @@ const subscriptionsSchema = new Schema<ISubscriptions>(
       type: String,
       required: true,
     },
+    duration: {
+      type: Number,
+      default: 1,
+    },
   },
   {
     timestamps: true,

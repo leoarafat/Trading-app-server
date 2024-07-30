@@ -5,4 +5,5 @@ export type ISubscriptions = {
   swapPoint: string;
   positiveCommentPoint: string;
   negativeCommentPoint: string;
+  duration: number;
 };

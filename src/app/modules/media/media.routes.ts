@@ -15,7 +15,7 @@ router.post(
   '/create-video-adds',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   uploadFile(),
-  AddsController.insertIntoDB,
+  AddsController.addVideoAdds,
 );
 router.get(
   '/all-adds',
@@ -34,10 +34,10 @@ router.patch(
   AddsController.updateAdds,
 );
 router.patch(
-  '/edit/video-adds/:id',
+  '/edit-video-adds/:id',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   uploadFile(),
-  AddsController.updateAdds,
+  AddsController.updateVideoAdds,
 );
 router.delete(
   '/delete-adds/:id',

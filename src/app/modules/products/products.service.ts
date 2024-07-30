@@ -6,6 +6,7 @@ import { Category } from '../category/category.model';
 import { SubCategory } from '../sub-category/sub-category.model';
 import User from '../auth/auth.model';
 import QueryBuilder from '../../../builder/QueryBuilder';
+import { Request } from 'express';
 
 const insertIntoDB = async (
   files: any,
@@ -73,8 +74,37 @@ const myProducts = async (user: JwtPayload, query: Record<string, unknown>) => {
     data: result,
   };
 };
+const updateProduct = async (req: Request) => {
+  const { files } = req as any;
+  const id = req.params.id;
+  let image = undefined;
+
+  if (files && files.image) {
+    image = `/images/image/${files.image[0].filename}`;
+  }
+
+  const isExist = await Product.findOne({ _id: id });
+
+  if (!isExist) {
+    throw new ApiError(404, 'Product not found !');
+  }
+
+  const { ...productData } = req.body;
+
+  const updatedData: Partial<IProducts> = { ...productData };
+
+  const result = await Product.findOneAndUpdate(
+    { _id: id },
+    { image, ...updatedData },
+    {
+      new: true,
+    },
+  );
+  return result;
+};
 export const ProductService = {
   insertIntoDB,
   products,
   myProducts,
+  updateProduct,
 };

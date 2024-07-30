@@ -11,5 +11,25 @@ router.post(
   uploadFile(),
   ProductController.insertIntoDB,
 );
-
+router.get(
+  '/my-products',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.USER),
+  ProductController.myProducts,
+);
+router.get(
+  '/products',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.USER),
+  ProductController.products,
+);
+router.patch(
+  '/edit/:id',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.USER),
+  uploadFile(),
+  ProductController.updateProduct,
+);
+router.delete(
+  '/delete/:id',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.USER),
+  ProductController.deleteProduct,
+);
 export const ProductRoutes = router;

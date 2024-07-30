@@ -102,9 +102,18 @@ const updateProduct = async (req: Request) => {
   );
   return result;
 };
+const deleteProduct = async (id: string) => {
+  const isExist = await Product.findOne({ _id: id });
+
+  if (!isExist) {
+    throw new ApiError(404, 'Product not found !');
+  }
+  return await Product.findByIdAndDelete(id);
+};
 export const ProductService = {
   insertIntoDB,
   products,
   myProducts,
   updateProduct,
+  deleteProduct,
 };

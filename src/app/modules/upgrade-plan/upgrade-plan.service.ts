@@ -7,6 +7,7 @@ import { Subscription } from '../subscriptions/subscriptions.model';
 import { Plan } from './upgrade-plan.model';
 import QueryBuilder from '../../../builder/QueryBuilder';
 import { IReqUser } from '../auth/auth.interface';
+import Notification from '../notifications/notifications.model';
 
 const upgradeSubscription = async (req: Request) => {
   const { planId, transactionId, payment_status, amount } = req.body;
@@ -40,13 +41,13 @@ const upgradeSubscription = async (req: Request) => {
     transactionId: transactionId,
   });
   await checkUser.save();
-  //   const notification = await Notification.create({
-  //     user: checkUser?._id,
-  //     title: 'Unlock New Subscription Plan',
-  //     message: `Unlock New Plan From ${checkUser?.name} on ${subscriptionPlan?.plan_type} Subscription.`,
-  //   });
-  //   //@ts-ignore
-  //   global.io.to(checkUser?._id.toString()).emit('notification', notification);
+  const notification = await Notification.create({
+    user: checkUser?._id,
+    title: 'Unlock New Subscription Plan',
+    message: `Unlock New Plan From ${checkUser?.name} on ${subscriptionPlan?.planName} Subscription.`,
+  });
+  //@ts-ignore
+  global.io.to(checkUser?._id.toString()).emit('notification', notification);
   return subscription;
 };
 const AllSubscriber = async (query: Record<string, unknown>) => {

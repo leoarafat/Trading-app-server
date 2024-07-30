@@ -1,3 +1,4 @@
+import { generateLastMonthsData } from '../../../utils/analytics.generator';
 import User from '../auth/auth.model';
 
 const totalCount = async () => {
@@ -15,7 +16,18 @@ const totalCount = async () => {
     diamondUsers,
   };
 };
+const Analytics = async () => {
+  //! User
+  const monthlyUserGrowth = await generateLastMonthsData(User, 1);
 
+  //! Income
+  const monthlyIncomeGrowth = await generateLastMonthsData(User, 1);
+  return {
+    monthlyUserGrowth,
+    monthlyIncomeGrowth,
+  };
+};
 export const DashboardService = {
   totalCount,
+  Analytics,
 };

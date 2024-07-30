@@ -1,50 +1,50 @@
 import { Request, Response } from 'express';
 import catchAsync from '../../../shared/catchasync';
-import { categoryService } from './media.service';
 import sendResponse from '../../../shared/sendResponse';
-import { ICategory } from './media.interface';
+import { AddsService } from './media.service';
+import { IAdds } from './media.interface';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await categoryService.insertIntoDB(req.files, req.body);
-  sendResponse<ICategory>(res, {
+  const result = await AddsService.insertIntoDB(req.files, req.body);
+  sendResponse<IAdds>(res, {
     statusCode: 200,
     success: true,
-    message: 'Category create successfully',
+    message: 'Adds create successfully',
     data: result,
   });
 });
-const updateCategory = catchAsync(async (req: Request, res: Response) => {
-  const result = await categoryService.updateCategory(req);
-  sendResponse<ICategory>(res, {
+const updateAdds = catchAsync(async (req: Request, res: Response) => {
+  const result = await AddsService.updateAdds(req);
+  sendResponse<IAdds>(res, {
     statusCode: 200,
     success: true,
-    message: 'Category update successfully',
+    message: 'Adds update successfully',
     data: result,
   });
 });
-const deleteCategory = catchAsync(async (req: Request, res: Response) => {
-  const result = await categoryService.deleteCategory(req.params.id);
-  sendResponse<ICategory>(res, {
+const deleteAdds = catchAsync(async (req: Request, res: Response) => {
+  const result = await AddsService.deleteAdds(req.params.id);
+  sendResponse<IAdds>(res, {
     statusCode: 200,
     success: true,
-    message: 'Category delete successfully',
+    message: 'Adds delete successfully',
     data: result,
   });
 });
-const categories = catchAsync(async (req: Request, res: Response) => {
-  const result = await categoryService.categories(req.query);
-  sendResponse<ICategory[]>(res, {
+const allAdds = catchAsync(async (req: Request, res: Response) => {
+  const result = await AddsService.allAdds(req.query);
+  sendResponse<IAdds[]>(res, {
     statusCode: 200,
     success: true,
-    message: 'Category Retrieved successfully',
+    message: 'Adds Retrieved successfully',
     meta: result.meta,
     data: result.data,
   });
 });
 
-export const CategoryController = {
-  categories,
+export const AddsController = {
+  allAdds,
   insertIntoDB,
-  updateCategory,
-  deleteCategory,
+  updateAdds,
+  deleteAdds,
 };

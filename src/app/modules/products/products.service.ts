@@ -77,10 +77,12 @@ const myProducts = async (user: JwtPayload, query: Record<string, unknown>) => {
 const updateProduct = async (req: Request) => {
   const { files } = req as any;
   const id = req.params.id;
-  let image = undefined;
+  const productImage = [];
 
-  if (files && files.image) {
-    image = `/images/image/${files.image[0].filename}`;
+  if (files && 'image' in files && files.image.length) {
+    for (const image of files.image) {
+      productImage.push(`/images/image/${image.filename}`);
+    }
   }
 
   const isExist = await Product.findOne({ _id: id });
@@ -89,13 +91,14 @@ const updateProduct = async (req: Request) => {
     throw new ApiError(404, 'Product not found !');
   }
 
-  const { ...productData } = req.body;
-
-  const updatedData: Partial<IProducts> = { ...productData };
+  const updateData = {
+    ...req.body,
+    images: productImage,
+  };
 
   const result = await Product.findOneAndUpdate(
     { _id: id },
-    { image, ...updatedData },
+    { ...updateData },
     {
       new: true,
     },

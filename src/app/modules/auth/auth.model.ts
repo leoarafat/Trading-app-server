@@ -37,19 +37,25 @@ const UserSchema = new Schema<IUser, UserModel>(
     address: {
       type: String,
     },
+    points: {
+      type: Number,
+      default: 0,
+    },
     role: {
       type: String,
       enum: ['ADMIN', 'SUPER_ADMIN', 'USER'],
       default: 'USER',
     },
+    userType: {
+      type: String,
+      enum: ['Gold', 'Platinum', 'Diamond', 'Trial'],
+      default: 'Trial',
+    },
     gender: {
       type: String,
       enum: ['Male', 'Female', 'Others'],
-      // required: true,
     },
-    age: {
-      type: String,
-    },
+
     profile_image: {
       type: String,
       default:

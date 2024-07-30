@@ -5,6 +5,7 @@ import { SubCategoryRoutes } from '../modules/sub-category/sub-category.routes';
 import { SubscriptionsRoutes } from '../modules/subscriptions/subscriptions.routes';
 import { AddsRoutes } from '../modules/media/media.routes';
 import { ManageRoutes } from '../modules/settings/settings.routes';
+import { DashboardRoutes } from '../modules/dashboard/dashboard.routes';
 
 const router = express.Router();
 
@@ -32,6 +33,10 @@ const moduleRoutes = [
   {
     path: '/rules',
     route: ManageRoutes,
+  },
+  {
+    path: '/dashboard',
+    route: DashboardRoutes,
   },
 ];
 moduleRoutes.forEach(route => router.use(route.path, route.route));

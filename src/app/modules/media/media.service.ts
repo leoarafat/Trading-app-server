@@ -2,78 +2,73 @@
 import { Request } from 'express';
 import QueryBuilder from '../../../builder/QueryBuilder';
 import ApiError from '../../../errors/ApiError';
-import { ICategory } from './media.interface';
-import { Category } from './media.model';
+import { IAdds } from './media.interface';
+import { Adds } from './media.model';
 
-const insertIntoDB = async (files: any, payload: ICategory) => {
+const insertIntoDB = async (files: any, payload: IAdds) => {
   if (!files?.image) {
     throw new ApiError(400, 'File is missing');
   }
-  const checkIsExist = await Category.findOne({ name: payload.name });
-  if (checkIsExist) {
-    throw new ApiError(400, 'Category already exist');
-  }
+
   if (files?.image) {
     payload.image = `/images/image/${files.image[0].filename}`;
   }
-  return await Category.create(payload);
+  return await Adds.create(payload);
 };
 
-const categories = async (query: Record<string, unknown>) => {
-  const categoryQuery = new QueryBuilder(Category.find(), query)
+const allAdds = async (query: Record<string, unknown>) => {
+  const addsQuery = new QueryBuilder(Adds.find(), query)
     .search([])
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  const result = await categoryQuery.modelQuery;
-  const meta = await categoryQuery.countTotal();
+  const result = await addsQuery.modelQuery;
+  const meta = await addsQuery.countTotal();
 
   return {
     meta,
     data: result,
   };
 };
-const updateCategory = async (req: Request) => {
+const updateAdds = async (req: Request) => {
   const { files } = req as any;
   const id = req.params.id;
-  let image = undefined;
+  const { ...AddsData } = req.body;
 
   if (files && files.image) {
-    image = `/images/image/${files.image[0].filename}`;
+    AddsData.image = `/images/image/${files.image[0].filename}`;
   }
 
-  const isExist = await Category.findOne({ _id: id });
+  const isExist = await Adds.findOne({ _id: id });
 
   if (!isExist) {
-    throw new ApiError(404, 'Category not found !');
+    throw new ApiError(404, 'Adds not found !');
   }
 
-  const { ...categoryData } = req.body;
+  const updatedData: Partial<IAdds> = { ...AddsData };
 
-  const updatedData: Partial<ICategory> = { ...categoryData };
-
-  const result = await Category.findOneAndUpdate(
+  const result = await Adds.findOneAndUpdate(
     { _id: id },
-    { image, ...updatedData },
+    { ...updatedData },
     {
       new: true,
     },
   );
   return result;
 };
-const deleteCategory = async (id: string) => {
-  const isExist = await Category.findOne({ _id: id });
+const deleteAdds = async (id: string) => {
+  const isExist = await Adds.findOne({ _id: id });
 
   if (!isExist) {
-    throw new ApiError(404, 'Category not found !');
+    throw new ApiError(404, 'Adds not found !');
   }
-  return await Category.findByIdAndDelete(id);
+  return await Adds.findByIdAndDelete(id);
 };
-export const categoryService = {
+export const AddsService = {
   insertIntoDB,
-  categories,
-  updateCategory,
-  deleteCategory,
+  allAdds,
+  updateAdds,
+  deleteAdds,
 };

@@ -54,7 +54,27 @@ const products = async (query: Record<string, unknown>) => {
     data: result,
   };
 };
+const myProducts = async (user: JwtPayload, query: Record<string, unknown>) => {
+  const categoryQuery = new QueryBuilder(
+    Product.find({ user: user.userId }),
+    query,
+  )
+    .search([])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await categoryQuery.modelQuery;
+  const meta = await categoryQuery.countTotal();
+
+  return {
+    meta,
+    data: result,
+  };
+};
 export const ProductService = {
   insertIntoDB,
   products,
+  myProducts,
 };

@@ -171,6 +171,7 @@ const getMonthlyUserGrowth = async (year?: number) => {
     throw error;
   }
 };
+
 export const DashboardService = {
   totalCount,
   getMonthlySubscriptionGrowth,

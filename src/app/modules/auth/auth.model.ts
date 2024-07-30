@@ -10,11 +10,7 @@ const UserSchema = new Schema<IUser, UserModel>(
       type: String,
       required: true,
     },
-    user_name: {
-      type: String,
-      unique: true,
-      sparse: true,
-    },
+
     email: {
       type: String,
       required: [true, 'Email is required'],
@@ -72,6 +68,81 @@ const UserSchema = new Schema<IUser, UserModel>(
     },
 
     date_of_birth: {
+      type: Date,
+    },
+    place_of_birth: {
+      type: String,
+    },
+    license_number: {
+      type: String,
+    },
+    passport_number: {
+      type: String,
+    },
+    profession: {
+      type: String,
+    },
+    region: {
+      type: String,
+    },
+    haveChildren: {
+      type: String,
+    },
+    havePets: {
+      type: String,
+    },
+    haveVehicle: {
+      type: String,
+    },
+    willingVehicle: {
+      type: String,
+    },
+    ownerOfProperty: {
+      type: String,
+    },
+    ableApproveForm: {
+      type: String,
+    },
+    propertyInsured: {
+      type: String,
+    },
+    utilitiesUptoDate: {
+      type: String,
+    },
+    aboutSwap: {
+      type: String,
+    },
+    departureArrival: {
+      type: String,
+    },
+    travelStartDestination: {
+      type: String,
+    },
+    travelEndDestination: {
+      type: String,
+    },
+    travelStartState: {
+      type: String,
+    },
+    travelEndState: {
+      type: String,
+    },
+    travelStartCounty: {
+      type: String,
+    },
+    travelEndCounty: {
+      type: String,
+    },
+    travelStartCountry: {
+      type: String,
+    },
+    travelEndCountry: {
+      type: String,
+    },
+    purposeOfTravel: {
+      type: String,
+    },
+    datesOfTravel: {
       type: Date,
     },
     verifyCode: {

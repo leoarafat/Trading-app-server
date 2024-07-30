@@ -78,6 +78,7 @@ export type IUser = {
   expirationTime: Date;
   isPaid: boolean;
   points: number;
+  isApproved: boolean;
   userType: 'Gold' | 'Platinum' | 'Diamond' | 'Trial';
   conversationId: string;
 };

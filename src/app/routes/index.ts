@@ -7,6 +7,7 @@ import { AddsRoutes } from '../modules/media/media.routes';
 import { ManageRoutes } from '../modules/settings/settings.routes';
 import { DashboardRoutes } from '../modules/dashboard/dashboard.routes';
 import { UpgradePlanRoutes } from '../modules/upgrade-plan/upgrade-plan.routes';
+import { ProductRoutes } from '../modules/products/products.routes';
 
 const router = express.Router();
 
@@ -42,6 +43,10 @@ const moduleRoutes = [
   {
     path: '/plan',
     route: UpgradePlanRoutes,
+  },
+  {
+    path: '/product',
+    route: ProductRoutes,
   },
 ];
 moduleRoutes.forEach(route => router.use(route.path, route.route));

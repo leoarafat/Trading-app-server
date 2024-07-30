@@ -132,7 +132,6 @@ export const AddsService = {
   deleteAdds,
   addVideoAdds,
   allVideoAdds,
-  VideoAdds,
   updateVideoAdds,
   deleteVideoAdds,
 };

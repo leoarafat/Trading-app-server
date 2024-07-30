@@ -2,7 +2,7 @@
 import { Request } from 'express';
 import QueryBuilder from '../../../builder/QueryBuilder';
 import ApiError from '../../../errors/ApiError';
-import { IAdds } from './media.interface';
+import { IAdds, IAddsVideo } from './media.interface';
 import { Adds } from './media.model';
 
 const insertIntoDB = async (files: any, payload: IAdds) => {
@@ -15,7 +15,16 @@ const insertIntoDB = async (files: any, payload: IAdds) => {
   }
   return await Adds.create(payload);
 };
+const addVideoAdds = async (files: any, payload: IAddsVideo) => {
+  if (!files?.video) {
+    throw new ApiError(400, 'File is missing');
+  }
 
+  if (files?.video) {
+    payload.video = `/video/${files.video[0].filename}`;
+  }
+  return await Adds.create(payload);
+};
 const allAdds = async (query: Record<string, unknown>) => {
   const addsQuery = new QueryBuilder(Adds.find(), query)
     .search([])
@@ -71,4 +80,5 @@ export const AddsService = {
   allAdds,
   updateAdds,
   deleteAdds,
+  addVideoAdds,
 };

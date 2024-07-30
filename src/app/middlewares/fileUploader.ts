@@ -72,7 +72,7 @@ export const uploadFile = () => {
     storage: storage,
     fileFilter: fileFilter,
   }).fields([
-    { name: 'image', maxCount: 1 },
+    { name: 'image', maxCount: 30 },
     { name: 'cover_image', maxCount: 1 },
     { name: 'profile_image', maxCount: 1 },
     { name: 'video', maxCount: 1 },

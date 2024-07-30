@@ -12,7 +12,16 @@ const totalCount = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
+const Analytics = catchAsync(async (req: Request, res: Response) => {
+  const result = await DashboardService.Analytics();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Success',
+    data: result,
+  });
+});
 export const DashboardController = {
   totalCount,
+  Analytics,
 };

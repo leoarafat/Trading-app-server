@@ -5,6 +5,7 @@ import { Product } from './products.model';
 import { Category } from '../category/category.model';
 import { SubCategory } from '../sub-category/sub-category.model';
 import User from '../auth/auth.model';
+import QueryBuilder from '../../../builder/QueryBuilder';
 
 const insertIntoDB = async (
   files: any,
@@ -37,7 +38,23 @@ const insertIntoDB = async (
   payload.user = user.userId;
   return await Product.create(payload);
 };
+const products = async (query: Record<string, unknown>) => {
+  const categoryQuery = new QueryBuilder(Product.find(), query)
+    .search([])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
+  const result = await categoryQuery.modelQuery;
+  const meta = await categoryQuery.countTotal();
+
+  return {
+    meta,
+    data: result,
+  };
+};
 export const ProductService = {
   insertIntoDB,
+  products,
 };

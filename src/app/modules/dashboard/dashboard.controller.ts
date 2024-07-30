@@ -59,11 +59,22 @@ const rejectUser = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
+const getLatestPendingUsers = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await DashboardService.latestPendingUsers();
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Pending users retrieved successfully',
+      data: result,
+    });
+  },
+);
 export const DashboardController = {
   totalCount,
   getMonthlySubscriptionGrowth,
   getMonthlyUserGrowth,
   approveUser,
   rejectUser,
+  getLatestPendingUsers,
 };

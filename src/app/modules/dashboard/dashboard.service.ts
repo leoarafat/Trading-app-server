@@ -94,7 +94,12 @@ const getMonthlySubscriptionGrowth = async (year?: number) => {
     throw error;
   }
 };
-
+const latestPendingUsers = async () => {
+  const pendingUsers = await User.find({ isApproved: false })
+    .sort({ createdAt: -1 })
+    .limit(5);
+  return pendingUsers;
+};
 const getMonthlyUserGrowth = async (year?: number) => {
   try {
     const currentYear = new Date().getFullYear();
@@ -206,4 +211,5 @@ export const DashboardService = {
   getMonthlyUserGrowth,
   approveUser,
   rejectUser,
+  latestPendingUsers,
 };

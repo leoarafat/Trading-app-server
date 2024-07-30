@@ -18,6 +18,11 @@ router.get(
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   DashboardController.getMonthlyUserGrowth,
 );
+router.get(
+  '/pending-users',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  DashboardController.getLatestPendingUsers,
+);
 router.patch(
   '/approve/:id',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
@@ -28,4 +33,5 @@ router.patch(
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   DashboardController.rejectUser,
 );
+
 export const DashboardRoutes = router;

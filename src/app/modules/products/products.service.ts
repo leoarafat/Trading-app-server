@@ -113,10 +113,27 @@ const deleteProduct = async (id: string) => {
   }
   return await Product.findByIdAndDelete(id);
 };
+const singleProduct = async (id: string) => {
+  const result = await Product.findById(id).populate([
+    {
+      path: 'category',
+      select: 'name',
+    },
+    {
+      path: 'subCategory',
+      select: 'name',
+    },
+  ]);
+  const similarProduct = await Product.find({
+    subCategory: result?.subCategory,
+  });
+  return { product: result, similarProduct };
+};
 export const ProductService = {
   insertIntoDB,
   products,
   myProducts,
   updateProduct,
   deleteProduct,
+  singleProduct,
 };

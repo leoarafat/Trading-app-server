@@ -59,10 +59,30 @@ const myProducts = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   });
 });
+const productForSwap = catchAsync(async (req: Request, res: Response) => {
+  const result = await ProductService.productForSwap(req);
+  sendResponse<IProducts>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Product Retrieved successfully',
+    data: result,
+  });
+});
+const singleProduct = catchAsync(async (req: Request, res: Response) => {
+  const result = await ProductService.singleProduct(req.params.id);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Product Retrieved successfully',
+    data: result,
+  });
+});
 export const ProductController = {
   insertIntoDB,
   products,
   myProducts,
   updateProduct,
   deleteProduct,
+  productForSwap,
+  singleProduct,
 };

@@ -129,6 +129,13 @@ const singleProduct = async (id: string) => {
   });
   return { product: result, similarProduct };
 };
+const productForSwap = async (req: Request) => {
+  const user = req.user as JwtPayload;
+  const { productId } = req.params;
+  return await Product.findOne({
+    $and: [{ user: user.userId }, { _id: productId }],
+  });
+};
 export const ProductService = {
   insertIntoDB,
   products,
@@ -136,4 +143,5 @@ export const ProductService = {
   updateProduct,
   deleteProduct,
   singleProduct,
+  productForSwap,
 };

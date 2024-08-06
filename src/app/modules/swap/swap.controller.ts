@@ -41,7 +41,7 @@ const swapDetails: RequestHandler = catchAsync(
 );
 const approveSwap: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await SwapService.approveSwap(req.params.id);
+    const result = await SwapService.approveSwap(req);
 
     sendResponse(res, {
       statusCode: 200,

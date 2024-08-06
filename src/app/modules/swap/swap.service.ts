@@ -4,7 +4,8 @@ import ApiError from '../../../errors/ApiError';
 import { Swap } from './swap.model';
 import User from '../auth/auth.model';
 import { IReqUser } from '../auth/auth.interface';
-import { Point } from '../points/points.model';
+// import { Point } from '../points/points.model';
+import { Product } from '../products/products.model';
 
 const makeSwap = async (req: Request) => {
   const user = req.user as IReqUser;
@@ -40,8 +41,17 @@ const approveSwap = async (req: Request) => {
   if (!isExist) {
     throw new ApiError(404, 'Product not found');
   }
-  const isExistPoint = await Point.findOne({ user: user.userId });
-  console.log(isExistPoint);
+  const isExistFromProduct = await Product.findOne({ user: user.userId });
+  if (!isExistFromProduct) {
+    throw new ApiError(404, 'Product not found');
+  }
+  const isExistToProduct = await Product.findOne({ user: user.userId });
+  if (!isExistToProduct) {
+    throw new ApiError(404, 'Product not found');
+  }
+
+  // const isExistPoint = await Point.findOne({ user: user.userId });
+
   return await Swap.findByIdAndUpdate(
     id,
     { isApproved: 'approved' },

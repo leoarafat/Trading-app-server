@@ -51,11 +51,13 @@ const upgradeSubscription = async (req: Request) => {
   return subscription;
 };
 const AllSubscriber = async (query: Record<string, unknown>) => {
-  const subscriptionsQuery = (
-    await new QueryBuilder(Plan.find().populate('user_id'), query)
-      .search(['plan_type'])
-      .filter()
+  const subscriptionsQuery = new QueryBuilder(
+    Plan.find().populate('user_id'),
+    query,
   )
+    .search(['plan_type'])
+    .filter()
+
     .sort()
     .paginate()
     .fields();
